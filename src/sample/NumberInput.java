@@ -8,11 +8,12 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TextField;
 
-public class NumberInput extends TextField {
-
+class NumberInput extends TextField {
+    private int min_value = -1;
+    private int max_value = -1;
     private int maxLength = -1;
 
-    public NumberInput() {
+    NumberInput() {
         textProperty().addListener(new ChangeListener<String>() {
             private boolean ignore;
 
@@ -45,19 +46,27 @@ public class NumberInput extends TextField {
         });
     }
 
-    /**
-     * Gets the max length of the text field.
-     * @return The max length.
-     */
-    public int getMaxLength() {
+    int getMaxLength() {
         return this.maxLength;
     }
 
-    /**
-     * Sets the max length of the text field.
-     * @param maxLength The max length.
-     */
-    public void setMaxLength(int maxLength) {
+    void setMaxLength(int max) {
         this.maxLength = maxLength;
+    }
+
+    int getMin_value() {
+        return this.min_value;
+    }
+
+    void setMaxValue(int max){
+        this.max_value = max;
+    }
+
+    int getMax_value(){
+        return this.max_value;
+    }
+
+    void setMinValue(int min){
+        this.max_value = min;
     }
 }

@@ -4,13 +4,13 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
-public class Cell extends Region {
+class Cell extends Region {
     private Integer[] walls = {1, 1, 1, 1};
     private boolean visited = false;
     private Integer size_x;
     private Integer size_y;
 
-    public Cell(int x, int y) {
+    Cell(int x, int y) {
         size_x = x;
         size_y = y;
         update();
@@ -23,7 +23,8 @@ public class Cell extends Region {
         } else {
             setStyle("-fx-background-color: mediumorchid");
         }
-
+        this.size_y = 20;
+        this.size_x = 20;
         Line[] lines = new Line[4];
         if(walls[0] == 1)
             lines[0] = new Line(0, 0, size_x, 0);
@@ -41,24 +42,22 @@ public class Cell extends Region {
             }
         }
     }
-    public void visitFrom(int side) {
-        System.out.print("From this cell: break " + side + "\n");
+    void visitFrom(int side) {
         walls[side] = 0;
         update();
     }
 
-    public void getVisited(int side) {
-        System.out.print("To this cell: break " + side + "\n");
+    void getVisited(int side) {
         visited = true;
         walls[side] = 0;
         update();
     }
 
-    public boolean isVisited() {
+    boolean isVisited() {
         return visited;
     }
 
-    public void Color() {
+    void Color() {
         setStyle("-fx-background-color: magenta");
     }
 }

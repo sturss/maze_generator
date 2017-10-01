@@ -1,11 +1,16 @@
 package sample;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+
+
 
 
 public class MazeGenerator extends Application {
@@ -20,25 +25,32 @@ public class MazeGenerator extends Application {
         stage.show();
     }
 
-    public HBox create_menu() {
+    private HBox create_menu() {
         HBox menu_view = new HBox();
         menu_view.setPadding(new Insets(15, 12, 15, 12));
         menu_view.setSpacing(10);
         menu_view.setStyle("-fx-background-color: #336699;");
 
-        TextField rows_number_input = new TextField();
-        TextField columns_number_input = new TextField();
+        NumberInput rows_number_input = new NumberInput();
+        NumberInput columns_number_input = new NumberInput();
+        Label rows_label = new Label("Rows");
+        Label cols_label = new Label("Columns");
+        rows_number_input.setMaxLength(2);
+        columns_number_input.setMaxLength(2);
+
+        rows_number_input.setMaxWidth(40);
+        columns_number_input.setMaxWidth(40);
 
         Button but = new Button("Create Maze");
         but.setOnAction(event -> this.build_maze(
                 Integer.parseInt(rows_number_input.getText()),
                 Integer.parseInt(columns_number_input.getText())));
-        menu_view.getChildren().addAll(but, rows_number_input, columns_number_input);
+        menu_view.getChildren().addAll(but, rows_label, rows_number_input, cols_label, columns_number_input);
         return menu_view;
     }
 
     private void build_maze(int rows, int cols) {
-        borderPane.setCenter(new Maze(cols, rows));
+        borderPane.setCenter(new Maze(rows, cols));
     }
 
     public static void main(String[] args) {
