@@ -8,7 +8,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 
-public class Kursova extends Application {
+public class MazeGenerator extends Application {
     private BorderPane borderPane = new BorderPane();
     @Override
     public void start(Stage stage) throws Exception {
