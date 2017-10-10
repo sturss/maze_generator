@@ -1,16 +1,20 @@
 package sample;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.Scene;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-
+import javax.imageio.ImageIO;
+import java.awt.image.RenderedImage;
+import java.io.File;
+import java.io.IOException;
 
 
 public class MazeGenerator extends Application {
@@ -50,10 +54,26 @@ public class MazeGenerator extends Application {
     }
 
     private void build_maze(int rows, int cols) {
-        borderPane.setCenter(new Maze(rows, cols));
+        Maze maze = new Maze(rows, cols);
+        maze.maze();
+        borderPane.setCenter(maze);
+        FileChooser fileChooser = new FileChooser();
     }
 
     public static void main(String[] args) {
         launch(args);
     }
 }
+
+
+/*
+
+WritableImage image = snapshot(new SnapshotParameters(), null);
+                        File file = new File("maze.png");
+                        try {
+                            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+                        } catch (IOException e) {
+                            System.out.print("Error of making an image");
+                        }
+
+ */

@@ -9,6 +9,7 @@ class Cell extends Region {
     private boolean visited = false;
     private Integer size_x;
     private Integer size_y;
+    private String color = "-fx-background-color: mediumorchid";
 
     Cell(int x, int y) {
         size_x = x;
@@ -18,14 +19,9 @@ class Cell extends Region {
 
     private void update() {
         getChildren().clear();
-        if(visited) {
-            setStyle("-fx-background-color: black");
-        } else {
-            setStyle("-fx-background-color: mediumorchid");
-        }
-        this.size_y = 20;
-        this.size_x = 20;
+        setStyle(color);
         Line[] lines = new Line[4];
+
         if(walls[0] == 1)
             lines[0] = new Line(0, 0, size_x, 0);
         if(walls[1] == 1)
@@ -37,7 +33,7 @@ class Cell extends Region {
         for (int i=0; i < 4; i++) {
             if(lines[i] != null) {
                 lines[i].setStroke(Color.WHITESMOKE);
-                lines[i].setStrokeWidth(2);
+                lines[i].setStrokeWidth(1);
                 getChildren().add(lines[i]);
             }
         }
@@ -47,9 +43,14 @@ class Cell extends Region {
         update();
     }
 
-    void getVisited(int side) {
+    void getVisitedFrom(int side) {
         visited = true;
         walls[side] = 0;
+        update();
+    }
+
+    void setVisitedColor() {
+        color = "-fx-background-color: black";
         update();
     }
 
@@ -57,7 +58,4 @@ class Cell extends Region {
         return visited;
     }
 
-    void Color() {
-        setStyle("-fx-background-color: magenta");
-    }
 }
