@@ -49,6 +49,11 @@ class Cell extends Region {
         update();
     }
 
+    void buildWall(int side) {
+        walls[side] = 1;
+        update();
+    }
+
     void setVisitedColor() {
         color = "-fx-background-color: black";
         update();

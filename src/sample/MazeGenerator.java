@@ -23,7 +23,7 @@ public class MazeGenerator extends Application {
     public void start(Stage stage) throws Exception {
         borderPane.setTop(create_menu());
         borderPane.setStyle("-fx-background-color: #ff0011;");
-        Scene scene = new Scene(borderPane, 800, 480);
+        Scene scene = new Scene(borderPane, 800, 490);
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
@@ -54,8 +54,8 @@ public class MazeGenerator extends Application {
     }
 
     private void build_maze(int rows, int cols) {
-        Maze maze = new Maze(rows, cols);
-        maze.maze();
+        Maze maze = new Maze(new RecursiveDivisionMazeAlgorithm(), rows, cols);
+        maze.createMaze();
         borderPane.setCenter(maze);
         FileChooser fileChooser = new FileChooser();
     }
