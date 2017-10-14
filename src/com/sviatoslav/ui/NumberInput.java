@@ -1,19 +1,19 @@
-// Author Christian Schudt
+// Author of idea Christian Schudt
 // Modified for just number input by Sviatoslav Skotar
 
-package com.sviatoslav;
+package com.sviatoslav.ui;
 
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TextField;
 
-class NumberInput extends TextField {
+public class NumberInput extends TextField {
     private int min_value = -1;
     private int max_value = -1;
     private int maxLength = -1;
 
-    NumberInput() {
+    public NumberInput() {
         textProperty().addListener(new ChangeListener<String>() {
             private boolean ignore;
 
@@ -46,27 +46,27 @@ class NumberInput extends TextField {
         });
     }
 
-    int getMaxLength() {
+    public int getMaxLength() {
         return this.maxLength;
     }
 
-    void setMaxLength(int max) {
+    public void setMaxLength(int max) {
         this.maxLength = maxLength;
     }
 
-    int getMin_value() {
+    public int getMin_value() {
         return this.min_value;
     }
 
-    void setMaxValue(int max){
+    public void setMaxValue(int max){
         this.max_value = max;
     }
 
-    int getMax_value(){
+    public int getMax_value(){
         return this.max_value;
     }
 
-    void setMinValue(int min){
+    public void setMinValue(int min){
         this.max_value = min;
     }
 }

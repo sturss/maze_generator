@@ -3,6 +3,7 @@ package com.sviatoslav;
 import com.sviatoslav.enums.MazeAlgorithm;
 import com.sviatoslav.mazes.Maze;
 import com.sviatoslav.mazes.MazeAlgorithmFactory;
+import com.sviatoslav.ui.NumberInput;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -13,7 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 
-public class MazeGenerator extends Application {
+public class Main extends Application {
     private BorderPane borderPane = new BorderPane();
     @Override
     public void start(Stage stage) throws Exception {
