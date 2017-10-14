@@ -1,5 +1,6 @@
-package sample;
+package com.sviatoslav.mazes;
 
+import com.sviatoslav.enums.Side;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -38,19 +39,19 @@ class Cell extends Region {
             }
         }
     }
-    void visitFrom(int side) {
-        walls[side] = 0;
+    void visitFrom(Side side) {
+        walls[side.getValue()] = 0;
         update();
     }
 
-    void getVisitedFrom(int side) {
+    void getVisitedFrom(Side side) {
         visited = true;
-        walls[side] = 0;
+        walls[side.getValue()] = 0;
         update();
     }
 
-    void buildWall(int side) {
-        walls[side] = 1;
+    void buildWall(Side side) {
+        walls[side.getValue()] = 1;
         update();
     }
 

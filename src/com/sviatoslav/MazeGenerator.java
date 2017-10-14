@@ -1,20 +1,16 @@
-package sample;
+package com.sviatoslav;
+
+import com.sviatoslav.enums.MazeAlgorithm;
+import com.sviatoslav.mazes.Maze;
+import com.sviatoslav.mazes.MazeAlgorithmFactory;
 import javafx.application.Application;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
-import javafx.scene.SnapshotParameters;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.Scene;
-import javafx.scene.image.WritableImage;
-import javafx.scene.layout.*;
-import javafx.stage.FileChooser;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-
-import javax.imageio.ImageIO;
-import java.awt.image.RenderedImage;
-import java.io.File;
-import java.io.IOException;
 
 
 public class MazeGenerator extends Application {
@@ -54,10 +50,9 @@ public class MazeGenerator extends Application {
     }
 
     private void build_maze(int rows, int cols) {
-        Maze maze = new Maze(new RecursiveDivisionMazeAlgorithm(), rows, cols);
+        Maze maze = new Maze(MazeAlgorithmFactory.getMazeAlgorithm(MazeAlgorithm.RECURSIVE_DIVIDE_SEARCH), rows, cols);
         maze.createMaze();
         borderPane.setCenter(maze);
-        FileChooser fileChooser = new FileChooser();
     }
 
     public static void main(String[] args) {
@@ -67,7 +62,6 @@ public class MazeGenerator extends Application {
 
 
 /*
-
 WritableImage image = snapshot(new SnapshotParameters(), null);
                         File file = new File("maze.png");
                         try {

@@ -1,4 +1,4 @@
-package sample;
+package com.sviatoslav.mazes;
 
 
 //Interface for maze generation algorithms
