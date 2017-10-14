@@ -1,4 +1,4 @@
-package com.sviatoslav.enums;
+package sviatoslav.enums;
 
 public enum MazeAlgorithm {
     DEPTH_FIRST_SEARCH(),

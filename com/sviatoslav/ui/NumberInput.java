@@ -1,7 +1,7 @@
 // Author of idea Christian Schudt
 // Modified for just number input by Sviatoslav Skotar
 
-package com.sviatoslav.ui;
+package sviatoslav.ui;
 
 
 import javafx.beans.value.ChangeListener;

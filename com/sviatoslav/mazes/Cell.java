@@ -1,6 +1,6 @@
-package com.sviatoslav.mazes;
+package sviatoslav.mazes;
 
-import com.sviatoslav.enums.Side;
+import sviatoslav.enums.Side;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;

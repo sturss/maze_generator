@@ -1,9 +1,9 @@
-package com.sviatoslav;
+package sviatoslav;
 
-import com.sviatoslav.enums.MazeAlgorithm;
-import com.sviatoslav.mazes.Maze;
-import com.sviatoslav.mazes.MazeAlgorithmFactory;
-import com.sviatoslav.ui.NumberInput;
+import sviatoslav.enums.MazeAlgorithm;
+import sviatoslav.mazes.Maze;
+import sviatoslav.mazes.MazeAlgorithmFactory;
+import sviatoslav.ui.NumberInput;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;

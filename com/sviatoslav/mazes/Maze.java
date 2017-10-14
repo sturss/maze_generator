@@ -1,4 +1,4 @@
-package com.sviatoslav.mazes;
+package sviatoslav.mazes;
 
 import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;

@@ -1,6 +1,6 @@
-package com.sviatoslav.mazes;
+package sviatoslav.mazes;
 
-import com.sviatoslav.enums.Side;
+import sviatoslav.enums.Side;
 import javafx.animation.ParallelTransition;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
