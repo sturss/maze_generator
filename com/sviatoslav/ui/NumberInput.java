@@ -9,9 +9,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TextField;
 
 public class NumberInput extends TextField {
-    private int min_value = -1;
-    private int max_value = -1;
-    private int maxLength = -1;
+    private int minValue = -1;
+    private int maxValue = -1;
+    private int maxNumberLength = -1;
 
     public NumberInput() {
         textProperty().addListener(new ChangeListener<String>() {
@@ -19,54 +19,54 @@ public class NumberInput extends TextField {
 
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                if(newValue.length() == 0 || maxLength == 0 || newValue.equals("0")) {
+                System.out.print(newValue + "\n");
+                if(newValue.length() == 0 || maxNumberLength == 0 || newValue.equals("0")) {
                     setText("");
                     return;
                 }
 
                 if(newValue.charAt(0) == '0') {
-                    if (maxLength >= newValue.length()) {
+                    if (maxNumberLength >= newValue.length()) {
                         setText(newValue.substring(1, newValue.length()));
                     }
                     else {
-                        setText(newValue.substring(1, maxLength));
+                        setText(newValue.substring(1, maxNumberLength));
                     }
                 }
 
                 for(int i = 0; i < newValue.length(); i++)
                     if(newValue.charAt(i) < '0' || newValue.charAt(i) > '9') {
                         setText(oldValue);
-                        return;
                     }
 
-                if (maxLength > 0 && newValue.length() > maxLength) {
+                if (maxNumberLength > 0 && newValue.length() > maxNumberLength) {
                     setText(oldValue);
                 }
             }
         });
     }
 
-    public int getMaxLength() {
-        return this.maxLength;
+    public int getMaxNumberLength() {
+        return this.maxNumberLength;
     }
 
-    public void setMaxLength(int max) {
-        this.maxLength = maxLength;
+    public void setMaxNumberLength(int max) {
+        this.maxNumberLength = max;
     }
 
-    public int getMin_value() {
-        return this.min_value;
+    public int getMinValue() {
+        return this.minValue;
     }
 
     public void setMaxValue(int max){
-        this.max_value = max;
+        this.maxValue = max;
     }
 
-    public int getMax_value(){
-        return this.max_value;
+    public int getMaxValue(){
+        return this.maxValue;
     }
 
     public void setMinValue(int min){
-        this.max_value = min;
+        this.maxValue = min;
     }
 }

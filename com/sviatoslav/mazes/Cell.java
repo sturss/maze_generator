@@ -1,53 +1,37 @@
 package sviatoslav.mazes;
 
-import sviatoslav.enums.Side;
 import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
+import sviatoslav.enums.Side;
 
 class Cell extends Region {
     private Integer[] walls = {1, 1, 1, 1};
     private boolean visited = false;
-    private Integer size_x;
-    private Integer size_y;
-    private String color = "-fx-background-color: mediumorchid";
+    private String colorStyle= "-fx-background-color: mediumorchid; ";
+    private String borderStyle = "-fx-border-width: 2 2 2 2; -fx-border-color: white; ";
 
     Cell(int x, int y) {
-        size_x = x;
-        size_y = y;
+        setMinWidth(x);
+        setMinHeight(y);
         update();
     }
 
     private void update() {
-        getChildren().clear();
-        setStyle(color);
-        Line[] lines = new Line[4];
-
-        if(walls[0] == 1)
-            lines[0] = new Line(0, 0, size_x, 0);
-        if(walls[1] == 1)
-            lines[1] = new Line(size_x, 0, size_x, size_y);
-        if(walls[3] == 1)
-            lines[2] = new Line(size_x, size_y, 0, size_y);
-        if(walls[2] == 1)
-            lines[3] = new Line(0, size_y, 0, 0);
-        for (int i=0; i < 4; i++) {
-            if(lines[i] != null) {
-                lines[i].setStroke(Color.WHITESMOKE);
-                lines[i].setStrokeWidth(1);
-                getChildren().add(lines[i]);
-            }
-        }
+        borderStyle = "-fx-border-width:" +
+                walls[Side.TOP_SIDE.getValue()] + " " +
+                walls[Side.RIGHT_SIDE.getValue()] + " " +
+                walls[Side.BOTTOM_SIDE.getValue()] + " " +
+                walls[Side.LEFT_SIDE.getValue()] + "; " +
+                "-fx-border-color: white;";
+        setStyle(colorStyle + borderStyle);
     }
-    void visitFrom(Side side) {
+
+    void deleteWall(Side side) {
         walls[side.getValue()] = 0;
         update();
     }
 
-    void getVisitedFrom(Side side) {
+    void getVisited() {
         visited = true;
-        walls[side.getValue()] = 0;
-        update();
     }
 
     void buildWall(Side side) {
@@ -56,7 +40,7 @@ class Cell extends Region {
     }
 
     void setVisitedColor() {
-        color = "-fx-background-color: black";
+        colorStyle = "-fx-background-color: black; ";
         update();
     }
 

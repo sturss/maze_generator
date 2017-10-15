@@ -1,6 +1,7 @@
 package sviatoslav.mazes;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.layout.GridPane;
 
 
@@ -8,7 +9,7 @@ public class Maze extends GridPane {
     private Integer rows;
     private Integer cols;
     private Cell[][] cells;
-    private int[][] sizes = {{19, 11, 40},  {22, 13, 35}, {26, 15, 30},
+    private int[][] sizes = {{10, 7, 52}, {19, 11, 42},  {22, 13, 35}, {26, 14, 30},
             {31, 18, 25}, {39, 23, 20}, {52, 30, 15}};
     private MazeAlgorithm algorithm;
 
@@ -22,7 +23,9 @@ public class Maze extends GridPane {
                 break;
             }
         }
-        setPadding( new Insets(5, 5, 0,5));
+
+        setPadding( new Insets(5, 5, 5,5));
+        setAlignment(Pos.CENTER);
         this.rows = rows;
         this.cols = cols;
         for(int i = 0; i < rows; i++) {
@@ -35,8 +38,6 @@ public class Maze extends GridPane {
     }
 
     public void createMaze() {
-
-        algorithm.createMaze(this.cells, this.rows, this.cols
-        );
+        algorithm.createMaze(this.cells, this.rows, this.cols);
     }
 }

@@ -21,9 +21,10 @@ class DepthFirstMazeAlgorithm implements MazeAlgorithm {
         int col = 0;
         Point start = new Point(row, col);
         Point end = null;
-        cells[row][col].getVisitedFrom(Side.LEFT_SIDE);
+        cells[row][col].getVisited();
+        cells[row][col].deleteWall(Side.LEFT_SIDE);
         cells[row][col].setVisitedColor();
-        cells[rand.nextInt(rows - 1)][cols - 1].visitFrom(Side.RIGHT_SIDE);
+        cells[rand.nextInt(rows - 1)][cols - 1].deleteWall(Side.RIGHT_SIDE);
         stack.push(new Point(row, col));
         long time = 20;
         while (true) {
@@ -44,7 +45,7 @@ class DepthFirstMazeAlgorithm implements MazeAlgorithm {
 
             int[] args = {row, col};
             Side s = side;
-            visitFrom1.setOnFinished(event -> cells[args[0]][args[1]].visitFrom(s));
+            visitFrom1.setOnFinished(event -> cells[args[0]][args[1]].deleteWall(s));
 
             if (side == Side.TOP_SIDE) {
                 row -= 1;
@@ -56,10 +57,13 @@ class DepthFirstMazeAlgorithm implements MazeAlgorithm {
                 col -= 1;
             }
             stack.push(new Point(row, col));
-            cells[row][col].getVisitedFrom(Side.from(3 - side.getValue()));
 
             int[] args2 = {row, col};
-            getVisited1.setOnFinished(event -> cells[args2[0]][args2[1]].setVisitedColor());
+            cells[row][col].getVisited();
+            getVisited1.setOnFinished(event -> {
+                cells[args2[0]][args2[1]].deleteWall(Side.from(3-s.getValue()));
+                cells[args2[0]][args2[1]].setVisitedColor();
+        });
 
             sides.clear();
             ParallelTransition transitions = new ParallelTransition(visitFrom1, getVisited1);

@@ -1,5 +1,6 @@
 package sviatoslav;
 
+import javafx.scene.layout.VBox;
 import sviatoslav.enums.MazeAlgorithm;
 import sviatoslav.mazes.Maze;
 import sviatoslav.mazes.MazeAlgorithmFactory;
@@ -19,8 +20,8 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         borderPane.setTop(create_menu());
-        borderPane.setStyle("-fx-background-color: #ff0011;");
-        Scene scene = new Scene(borderPane, 800, 490);
+        borderPane.setStyle("-fx-background-color: grey;");
+        Scene scene = new Scene(borderPane, 800, 500);
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
@@ -32,21 +33,36 @@ public class Main extends Application {
         menu_view.setSpacing(10);
         menu_view.setStyle("-fx-background-color: #336699;");
 
+        VBox input_fields = new VBox();
+        HBox row_input_field = new HBox();
+        HBox col_input_field = new HBox();
+
         NumberInput rows_number_input = new NumberInput();
         NumberInput columns_number_input = new NumberInput();
-        Label rows_label = new Label("Rows");
-        Label cols_label = new Label("Columns");
-        rows_number_input.setMaxLength(2);
-        columns_number_input.setMaxLength(2);
+
+        rows_number_input.setMaxNumberLength(3);
+        columns_number_input.setMaxNumberLength(3);
 
         rows_number_input.setMaxWidth(40);
         columns_number_input.setMaxWidth(40);
+
+
+        Label row_input_label = new Label("Rows:");
+        Label col_input_label = new Label("Columns:");
+
+        row_input_label.setMinWidth(55);
+        col_input_label.setMinWidth(55);
+
+        row_input_field.getChildren().addAll(row_input_label, rows_number_input);
+        col_input_field.getChildren().addAll(col_input_label, columns_number_input);
+        input_fields.getChildren().addAll(row_input_field, col_input_field);
+
 
         Button but = new Button("Create Maze");
         but.setOnAction(event -> this.build_maze(
                 Integer.parseInt(rows_number_input.getText()),
                 Integer.parseInt(columns_number_input.getText())));
-        menu_view.getChildren().addAll(but, rows_label, rows_number_input, cols_label, columns_number_input);
+        menu_view.getChildren().addAll(but, input_fields);
         return menu_view;
     }
 
