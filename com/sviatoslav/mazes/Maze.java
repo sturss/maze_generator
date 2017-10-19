@@ -6,18 +6,18 @@ import javafx.scene.layout.GridPane;
 
 
 public class Maze extends GridPane {
-    private Integer rows;
-    private Integer cols;
+    private int rows;
+    private int cols;
     private Cell[][] cells;
-    private int[][] sizes = {{10, 7, 52}, {19, 11, 42},  {22, 13, 35}, {26, 14, 30},
-            {31, 18, 25}, {39, 23, 20}, {52, 30, 15}};
+    private int[][] sizes = {{10, 7, 52}, {19, 11, 42},  {22, 13, 33}, {26, 14, 30},
+            {31, 18, 25}, {39, 23, 20}, {52, 29, 15}};
     private MazeAlgorithm algorithm;
 
-    public Maze(MazeAlgorithm a, int rows, int cols) {
-        algorithm = a;
+    public Maze(MazeAlgorithm algorithm, int rows, int cols) {
+        this.algorithm = algorithm;
         cells = new Cell[rows][cols];
         int size = 10;
-        for(int i =0; i < 6; i++) {
+        for(int i =0; i < 7; i++) {
             if(rows <= sizes[i][1] && cols <= sizes[i][0]) {
                 size = sizes[i][2];
                 break;
@@ -39,5 +39,13 @@ public class Maze extends GridPane {
 
     public void createMaze() {
         algorithm.createMaze(this.cells, this.rows, this.cols);
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public int getCols() {
+        return cols;
     }
 }

@@ -19,7 +19,6 @@ public class NumberInput extends TextField {
 
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                System.out.print(newValue + "\n");
                 if(newValue.length() == 0 || maxNumberLength == 0 || newValue.equals("0")) {
                     setText("");
                     return;

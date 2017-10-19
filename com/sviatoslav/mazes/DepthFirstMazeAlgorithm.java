@@ -19,8 +19,6 @@ class DepthFirstMazeAlgorithm implements MazeAlgorithm {
         ArrayList<Side> sides = new ArrayList<>(4);
         int row = rand.nextInt(rows - 2) + 1;
         int col = 0;
-        Point start = new Point(row, col);
-        Point end = null;
         cells[row][col].getVisited();
         cells[row][col].deleteWall(Side.LEFT_SIDE);
         cells[row][col].setVisitedColor();

@@ -25,23 +25,23 @@ class RecursiveDivisionMazeAlgorithm implements MazeAlgorithm {
             }
         }
         createM(cells, 0, 0, cols-1, rows-1, 0);
-        Random enter_exit = new Random();
-        cells[enter_exit.nextInt(rows-1)][0].deleteWall(Side.LEFT_SIDE);
-        cells[enter_exit.nextInt(rows-1)][cols-1].deleteWall(Side.RIGHT_SIDE);
+        Random random = new Random();
+        cells[random.nextInt(rows-1)][0].deleteWall(Side.LEFT_SIDE);
+        cells[random.nextInt(rows-1)][cols-1].deleteWall(Side.RIGHT_SIDE);
     }
 
-    private void createM(Cell[][] cells, int left_col_bound, int top_row_bound,
-                         int right_col_bound, int bottom_row_bound, int turn) {
-        if(right_col_bound - left_col_bound >= 1 && bottom_row_bound - top_row_bound >= 1) {
+    private void createM(Cell[][] cells, int leftColBound, int topRowBound,
+                         int rightColBound, int bottomRowBound, int turn) {
+        if(rightColBound - leftColBound >= 1 && bottomRowBound - topRowBound >= 1) {
             this.time += 200;
             Random rand = new Random();
             PauseTransition drawingPause  = new PauseTransition(Duration.millis(time));
-            int row = top_row_bound + rand.nextInt(bottom_row_bound - top_row_bound + turn) ;
-            int col = left_col_bound + rand.nextInt(right_col_bound- left_col_bound + 1 - turn) ;
+            int row = topRowBound + rand.nextInt(bottomRowBound - topRowBound + turn) ;
+            int col = leftColBound + rand.nextInt(rightColBound- leftColBound + 1 - turn) ;
 
             if(turn == 0) {
                 drawingPause.setOnFinished(event -> {
-                    for (int i = left_col_bound; i <= right_col_bound; i++) {
+                    for (int i = leftColBound; i <= rightColBound; i++) {
                         cells[row][i].buildWall(Side.BOTTOM_SIDE);
                         cells[row + 1][i].buildWall(Side.TOP_SIDE);
                     }
@@ -49,12 +49,12 @@ class RecursiveDivisionMazeAlgorithm implements MazeAlgorithm {
                     cells[row + 1][col].deleteWall(Side.TOP_SIDE);
                 });
                 drawingPause.play();
-                createM(cells, left_col_bound, top_row_bound, right_col_bound, row, 1);
-                createM(cells, left_col_bound, row+1, right_col_bound, bottom_row_bound, 1);
+                createM(cells, leftColBound, topRowBound, rightColBound, row, 1);
+                createM(cells, leftColBound, row+1, rightColBound, bottomRowBound, 1);
             }
             else {
                 drawingPause.setOnFinished(event -> {
-                            for (int i = top_row_bound; i <= bottom_row_bound; i++) {
+                            for (int i = topRowBound; i <= bottomRowBound; i++) {
                                 cells[i][col].buildWall(Side.RIGHT_SIDE);
                                 cells[i][col + 1].buildWall(Side.LEFT_SIDE);
                             }
@@ -62,8 +62,8 @@ class RecursiveDivisionMazeAlgorithm implements MazeAlgorithm {
                             cells[row][col+1].deleteWall(Side.LEFT_SIDE);
                         });
                 drawingPause.play();
-                createM(cells, left_col_bound, top_row_bound, col, bottom_row_bound, 0);
-                createM(cells, col+1, top_row_bound, right_col_bound, bottom_row_bound, 0);
+                createM(cells, leftColBound, topRowBound, col, bottomRowBound, 0);
+                createM(cells, col+1, topRowBound, rightColBound, bottomRowBound, 0);
             }
         }
     }
