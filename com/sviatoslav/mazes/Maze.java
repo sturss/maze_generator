@@ -22,7 +22,9 @@ public class Maze extends GridPane {
             {31, 18, 25}, {39, 23, 20}, {52, 29, 15}};
     private MazeAlgorithm algorithm;
 
-    public Maze(MazeAlgorithm algorithm, int rows, int cols) {
+    public Maze(MazeAlgorithm algorithm, int rows, int cols){
+        if (rows < 3 || cols < 3 || rows > 100 || cols > 100)
+            throw new IllegalArgumentException("Wrong values of maze size");
         this.algorithm = algorithm;
         cells = new Cell[rows][cols];
         int size = 10;

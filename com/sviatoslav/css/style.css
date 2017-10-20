@@ -1,0 +1,84 @@
+
+.borderPaneStyle {
+    -fx-background-color: #e0f2f1;
+    -fx-border-radius: 10 10 0 0;
+    -fx-background-radius: 10 10 0 0;
+    -fx-border-width: 1 1 1 1;
+    -fx-border-color: #005b4f;
+
+}
+
+.toolBarStyle {
+    -fx-background-color: #005b4f;
+    -fx-border-radius: 10 10 0 0;
+    -fx-background-radius: 10 10 0 0;
+}
+
+.btnStyle {
+    -fx-border-radius: 2 2 2 2;
+    -fx-background-radius: 2 2 2 2;
+    -fx-background-color: #4ebaaa;
+}
+
+.btnStyle:hover {
+    -fx-border-radius: 2 2 2 2;
+    -fx-background-radius: 2 2 2 2;
+    -fx-background-color: #64d8cb;
+}
+
+.btnCloseStyle {
+    -fx-border-width: 0 1 0 0;
+    -fx-border-radius: 10 0 0 0;
+    -fx-background-radius: 10 0 0 0;
+    -fx-border-color: #00766c;
+    -fx-background-color: #4ebaaa;
+}
+
+.btnMinimizeStyle {
+    -fx-border-width: 0 1 0 0;
+    -fx-border-radius: 0 0 0 0;
+    -fx-background-radius: 0 0 0 0;
+    -fx-border-color: #00766c;
+    -fx-background-color: #4ebaaa;
+}
+
+.btnCloseStyle:hover {
+    -fx-border-width: 0 1 0 0;
+    -fx-border-radius: 10 0 0 0;
+    -fx-background-radius: 10 0 0 0;
+    -fx-border-color: #00766c;
+    -fx-background-color: #64d8cb;
+}
+
+.btnMinimizeStyle:hover {
+    -fx-border-width: 0 1 0 0;
+    -fx-border-radius: 0 0 0 0;
+    -fx-background-radius: 0 0 0 0;
+    -fx-border-color: #00766c;
+    -fx-background-color: #64d8cb;
+}
+
+
+.inputFieldStyle {
+    -fx-background-color: #4ebaaa;
+    -fx-border-radius: 2 2 2 2;
+    -fx-background-radius: 2 2 2 2;
+}
+
+.labelStyle {
+    -fx-alignment: center-right;
+    -fx-min-width: 55;
+    -fx-max-wifth: 55;
+    -fx-text-fill: whitesmoke;
+}
+
+.inputHBoxStyle {
+    -fx-spacing: 2;
+    -fx-alignment: center;
+}
+
+.menuHBoxStyle {
+    -fx-spacing: 10;
+    -fx-background-color: #00897b;
+    -fx-alignment: center-left;
+}

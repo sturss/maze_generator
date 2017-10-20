@@ -35,16 +35,15 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         this.stage = stage;
         stage.initStyle(StageStyle.TRANSPARENT) ;
-        BorderPane topBP = new BorderPane();
 
-        borderPane.setStyle("-fx-background-color: #e0f2f1;  -fx-border-radius: 10 10 0 0; -fx-background-radius: 10 10 0 0;");
+        borderPane.getStyleClass().add("borderPaneStyle");
+        BorderPane topBP = new BorderPane();
         ToolBar toolBar = new ToolBar();
 
-        int height = 25;
-        toolBar.setStyle("-fx-background-color: #005b4f; -fx-border-radius: 10 10 0 0; -fx-background-radius: 10 10 0 0;");
-        toolBar.setPrefHeight(height);
-        toolBar.setMinHeight(height);
-        toolBar.setMaxHeight(height);
+        toolBar.getStyleClass().add("toolBarStyle");
+        toolBar.setPrefHeight(25);
+        toolBar.setMinHeight(25);
+        toolBar.setMaxHeight(25);
         toolBar.getItems().add(new WindowButtons());
         toolBar.setPadding(new Insets(0, 0, 0, 0));
 
@@ -80,7 +79,7 @@ public class Main extends Application {
         borderPane.setTop(topBP);
         Scene scene = new Scene(borderPane, 800, 555);
         scene.setFill(Color.TRANSPARENT);
-
+        scene.getStylesheets().add(getClass().getResource("css\\style.css").toExternalForm());
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
@@ -92,31 +91,11 @@ public class Main extends Application {
             Button closeBtn = new Button("X");
             Button minimizeBtn = new Button("_");
 
-            closeBtn.setStyle( " -fx-border-width: 0 1 0 0; -fx-border-radius: 10 0 0 0;" +
-                    " -fx-background-radius: 10 0 0 0;  -fx-border-color: #00766c; -fx-background-color: #4ebaaa");
-            closeBtn.setOnMouseEntered(e -> closeBtn.setStyle("-fx-border-width: 0 1 0 0; -fx-border-radius: 10 0 0 0;" +
-                    " -fx-background-radius: 10 0 0 0;  -fx-border-color: #00766c; -fx-background-color: #64d8cb"));
-            closeBtn.setOnMouseExited(e -> closeBtn.setStyle("-fx-border-width: 0 1 0 0; -fx-border-radius: 10 0 0 0;" +
-                    " -fx-background-radius: 10 0 0 0;  -fx-border-color: #00766c; -fx-background-color: #4ebaaa"));
+            closeBtn.getStyleClass().add("btnCloseStyle");
+            minimizeBtn.getStyleClass().add("btnMinimizeStyle");
 
-            minimizeBtn.setStyle( "-fx-border-radius: 0 0 0 0; -fx-background-radius: 0 0 0 0; -fx-background-color: #4ebaaa");
-            minimizeBtn.setOnMouseEntered(e -> minimizeBtn.setStyle("-fx-border-radius: 0 0 0 0; -fx-background-radius: 0 0 0 0; -fx-background-color: #64d8cb"));
-            minimizeBtn.setOnMouseExited(e -> minimizeBtn.setStyle("-fx-border-radius: 0 0 0 0; -fx-background-radius: 0 0 0 0; -fx-background-color: #4ebaaa"));
-
-
-            closeBtn.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    Platform.exit();
-                }
-            });
-
-            minimizeBtn.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    stage.setIconified(true);
-                }
-            });
+            closeBtn.setOnAction(actionEvent -> Platform.exit());
+            minimizeBtn.setOnAction(actionEvent -> stage.setIconified(true));
 
             this.getChildren().addAll(closeBtn, minimizeBtn);
         }
@@ -124,9 +103,8 @@ public class Main extends Application {
 
     private HBox create_menu() {
         HBox menuViewHBox = new HBox();
+        menuViewHBox.getStyleClass().add("menuHBoxStyle");
         menuViewHBox.setPadding(new Insets(15, 12, 15, 12));
-        menuViewHBox.setSpacing(10);
-        menuViewHBox.setStyle("-fx-background-color: #00897b;");
 
         VBox inputFieldsVBox = new VBox();
         VBox chooseAlgorithmVBox = new VBox();
@@ -135,8 +113,8 @@ public class Main extends Application {
 
         NumberInput rowNumberInput = new NumberInput();
         NumberInput colNumberInput = new NumberInput();
-        rowNumberInput.setStyle("-fx-background-color: #4ebaaa; -fx-border-radius: 2 2 2 2; -fx-background-radius: 2 2 2 2;");
-        colNumberInput.setStyle("-fx-background-color: #4ebaaa; -fx-border-radius: 2 2 2 2; -fx-background-radius: 2 2 2 2;");
+        rowNumberInput.getStyleClass().add("inputFieldStyle");
+        colNumberInput.getStyleClass().add("inputFieldStyle");
         rowNumberInput.setMaxNumberLength(3);
         colNumberInput.setMaxNumberLength(3);
         rowNumberInput.setMaxWidth(40);
@@ -144,19 +122,13 @@ public class Main extends Application {
 
         Label rowInputLabel = new Label("Rows:");
         Label colInputLabel = new Label("Columns:");
-        rowInputLabel.setAlignment(Pos.CENTER_RIGHT);
-        colInputLabel.setAlignment(Pos.CENTER_RIGHT);
-        rowInputLabel.setMinWidth(55);
-        colInputLabel.setMinWidth(55);
-        rowInputLabel.setTextFill(Color.web("white"));
-        colInputLabel.setTextFill(Color.web("white"));
+        rowInputLabel.getStyleClass().add("labelStyle");
+        colInputLabel.getStyleClass().add("labelStyle");
 
         rowFieldHBox.getChildren().addAll(rowInputLabel, rowNumberInput);
-        rowFieldHBox.setSpacing(2);
-        rowFieldHBox.setAlignment(Pos.CENTER);
         colFieldHBox.getChildren().addAll(colInputLabel, colNumberInput);
-        colFieldHBox.setSpacing(2);
-        colFieldHBox.setAlignment(Pos.CENTER);
+        rowFieldHBox.getStyleClass().add("inputHBoxStyle");
+        colFieldHBox.getStyleClass().add("inputHBoxStyle");
         inputFieldsVBox.getChildren().addAll(rowFieldHBox, colFieldHBox);
         inputFieldsVBox.setSpacing(2);
 
@@ -176,9 +148,7 @@ public class Main extends Application {
         chooseAlgorithmVBox.getChildren().addAll(algorithmDepthFirstCheck, algorithmRecursiveDivisionCheck);
 
         Button saveMaze = new Button("Save Maze Image");
-        saveMaze.setStyle( "-fx-border-radius: 2 2 2 2; -fx-background-radius: 2 2 2 2; -fx-background-color: #4ebaaa");
-        saveMaze.setOnMouseEntered(e -> saveMaze.setStyle("-fx-border-radius: 2 2 2 2; -fx-background-radius: 2 2 2 2; -fx-background-color: #64d8cb"));
-        saveMaze.setOnMouseExited(e -> saveMaze.setStyle("-fx-border-radius: 2 2 2 2; -fx-background-radius: 2 2 2 2; -fx-background-color: #4ebaaa"));
+        saveMaze.getStyleClass().add("btnStyle");
         saveMaze.setDisable(true);
         saveMaze.setOnAction(event -> {
             Maze s = (Maze) borderPane.getCenter();
@@ -186,9 +156,7 @@ public class Main extends Application {
         });
 
         Button createMazeBtn = new Button("Create Maze");
-        createMazeBtn.setStyle( "-fx-border-radius: 2 2 2 2; -fx-background-radius: 2 2 2 2; -fx-background-color: #4ebaaa");
-        createMazeBtn.setOnMouseEntered(e -> createMazeBtn.setStyle("-fx-border-radius: 2 2 2 2; -fx-background-radius: 2 2 2 2; -fx-background-color: #64d8cb"));
-        createMazeBtn.setOnMouseExited(e -> createMazeBtn.setStyle("-fx-border-radius: 2 2 2 2; -fx-background-radius: 2 2 2 2; -fx-background-color: #4ebaaa"));
+        createMazeBtn.getStyleClass().add("btnStyle");
         createMazeBtn.setOnAction(event -> {
             try {
                 if(Integer.parseInt(rowNumberInput.getText()) > 44 || Integer.parseInt(colNumberInput.getText()) > 77
@@ -208,10 +176,7 @@ public class Main extends Application {
             }
         });
 
-        saveMaze.setAlignment(Pos.CENTER_RIGHT);
         menuViewHBox.getChildren().addAll(createMazeBtn, inputFieldsVBox, chooseAlgorithmVBox, saveMaze);
-        menuViewHBox.setAlignment(Pos.CENTER_LEFT);
-        HBox.setHgrow(saveMaze, Priority.ALWAYS);
         return menuViewHBox;
     }
 

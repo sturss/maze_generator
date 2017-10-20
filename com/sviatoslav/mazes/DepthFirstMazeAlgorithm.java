@@ -4,7 +4,6 @@ import sviatoslav.enums.Side;
 import javafx.animation.ParallelTransition;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
