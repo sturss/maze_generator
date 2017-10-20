@@ -1,8 +1,17 @@
 package sviatoslav.mazes;
 
+import javafx.embed.swing.SwingFXUtils;
+import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Alert;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.GridPane;
+
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
 
 
 public class Maze extends GridPane {
@@ -47,5 +56,16 @@ public class Maze extends GridPane {
 
     public int getCols() {
         return cols;
+    }
+
+    @FXML
+    public void saveAsPng() {
+        WritableImage image = snapshot(new SnapshotParameters(), null);
+        File file = new File("chart.png");
+        try {
+            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+        } catch (IOException e) {
+            System.out.print(e);
+        }
     }
 }

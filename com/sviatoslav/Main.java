@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.StageStyle;
@@ -34,7 +35,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         this.stage = stage;
         stage.initStyle(StageStyle.TRANSPARENT) ;
-        BorderPane s = new BorderPane();
+        BorderPane topBP = new BorderPane();
 
         borderPane.setStyle("-fx-background-color: #e0f2f1;  -fx-border-radius: 10 10 0 0; -fx-background-radius: 10 10 0 0;");
         ToolBar toolBar = new ToolBar();
@@ -73,10 +74,10 @@ public class Main extends Application {
         });
 
 
-        s.setTop(toolBar);
-        s.setBottom(create_menu());
+        topBP.setTop(toolBar);
+        topBP.setBottom(create_menu());
 
-        borderPane.setTop(s);
+        borderPane.setTop(topBP);
         Scene scene = new Scene(borderPane, 800, 555);
         scene.setFill(Color.TRANSPARENT);
 
@@ -174,12 +175,20 @@ public class Main extends Application {
         VBox.setMargin(algorithmDepthFirstCheck, new Insets(2, 0, 5, 0));
         chooseAlgorithmVBox.getChildren().addAll(algorithmDepthFirstCheck, algorithmRecursiveDivisionCheck);
 
-        Button createMazeBtn = new Button("Create Maze");
+        Button saveMaze = new Button("Save Maze Image");
+        saveMaze.setStyle( "-fx-border-radius: 2 2 2 2; -fx-background-radius: 2 2 2 2; -fx-background-color: #4ebaaa");
+        saveMaze.setOnMouseEntered(e -> saveMaze.setStyle("-fx-border-radius: 2 2 2 2; -fx-background-radius: 2 2 2 2; -fx-background-color: #64d8cb"));
+        saveMaze.setOnMouseExited(e -> saveMaze.setStyle("-fx-border-radius: 2 2 2 2; -fx-background-radius: 2 2 2 2; -fx-background-color: #4ebaaa"));
+        saveMaze.setDisable(true);
+        saveMaze.setOnAction(event -> {
+            Maze s = (Maze) borderPane.getCenter();
+            s.saveAsPng();
+        });
 
+        Button createMazeBtn = new Button("Create Maze");
         createMazeBtn.setStyle( "-fx-border-radius: 2 2 2 2; -fx-background-radius: 2 2 2 2; -fx-background-color: #4ebaaa");
         createMazeBtn.setOnMouseEntered(e -> createMazeBtn.setStyle("-fx-border-radius: 2 2 2 2; -fx-background-radius: 2 2 2 2; -fx-background-color: #64d8cb"));
         createMazeBtn.setOnMouseExited(e -> createMazeBtn.setStyle("-fx-border-radius: 2 2 2 2; -fx-background-radius: 2 2 2 2; -fx-background-color: #4ebaaa"));
-
         createMazeBtn.setOnAction(event -> {
             try {
                 if(Integer.parseInt(rowNumberInput.getText()) > 44 || Integer.parseInt(colNumberInput.getText()) > 77
@@ -199,9 +208,10 @@ public class Main extends Application {
             }
         });
 
-
-        menuViewHBox.getChildren().addAll(createMazeBtn, inputFieldsVBox, chooseAlgorithmVBox);
+        saveMaze.setAlignment(Pos.CENTER_RIGHT);
+        menuViewHBox.getChildren().addAll(createMazeBtn, inputFieldsVBox, chooseAlgorithmVBox, saveMaze);
         menuViewHBox.setAlignment(Pos.CENTER_LEFT);
+        HBox.setHgrow(saveMaze, Priority.ALWAYS);
         return menuViewHBox;
     }
 
@@ -216,23 +226,16 @@ public class Main extends Application {
         }
 
         Maze maze = new Maze(mazeAlgorithm, rows, cols);
+        System.out.print(maze);
         maze.createMaze();
         borderPane.setCenter(maze);
+        BorderPane a = (BorderPane)borderPane.getTop();
+        HBox menu = (HBox)a.getBottom();
+        Button button = (Button)menu.getChildren().get(3);
+        button.setDisable(false);
     }
 
     public static void main(String[] args) {
         launch(args);
     }
 }
-
-
-/*
-WritableImage image = snapshot(new SnapshotParameters(), null);
-                        File file = new File("maze.png");
-                        try {
-                            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
-                        } catch (IOException e) {
-                            System.out.print("Error of making an image");
-                        }
-
- */
