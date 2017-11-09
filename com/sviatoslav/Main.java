@@ -1,14 +1,9 @@
 package sviatoslav;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.StageStyle;
@@ -23,12 +18,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-import java.awt.*;
-
 
 public class Main extends Application {
     private BorderPane borderPane = new BorderPane();
     private Stage stage;
+    private Maze maze;
     private double xOffset;
     private double yOffset;
     @Override
@@ -47,29 +41,19 @@ public class Main extends Application {
         toolBar.getItems().add(new WindowButtons());
         toolBar.setPadding(new Insets(0, 0, 0, 0));
 
-        toolBar.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                xOffset = stage.getX() - event.getScreenX();
-                yOffset = stage.getY() - event.getScreenY();
-                System.out.print(event.getX());
-            }
+        toolBar.setOnMousePressed(event -> {
+            xOffset = stage.getX() - event.getScreenX();
+            yOffset = stage.getY() - event.getScreenY();
         });
 
-        toolBar.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                stage.setX(event.getScreenX() + xOffset);
-                stage.setY(event.getScreenY() + yOffset);
-            }
+        toolBar.setOnMouseDragged(event -> {
+            stage.setX(event.getScreenX() + xOffset);
+            stage.setY(event.getScreenY() + yOffset);
         });
 
-        toolBar.setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                stage.setX(event.getScreenX() + xOffset);
-                stage.setY(event.getScreenY() + yOffset);
-            }
+        toolBar.setOnMouseReleased(event -> {
+            stage.setX(event.getScreenX() + xOffset);
+            stage.setY(event.getScreenY() + yOffset);
         });
 
 
@@ -87,7 +71,7 @@ public class Main extends Application {
 
     class WindowButtons extends HBox {
 
-        public WindowButtons() {
+        WindowButtons() {
             Button closeBtn = new Button("X");
             Button minimizeBtn = new Button("_");
 
@@ -155,6 +139,10 @@ public class Main extends Application {
             s.saveAsPng();
         });
 
+        Button shortestWayBtn = new Button("The Shortest Way");
+        shortestWayBtn.getStyleClass().add("btnStyle");
+        shortestWayBtn.setOnAction(event -> findShortestWay());
+
         Button createMazeBtn = new Button("Create Maze");
         createMazeBtn.getStyleClass().add("btnStyle");
         createMazeBtn.setOnAction(event -> {
@@ -176,11 +164,16 @@ public class Main extends Application {
             }
         });
 
-        menuViewHBox.getChildren().addAll(createMazeBtn, inputFieldsVBox, chooseAlgorithmVBox, saveMaze);
+        menuViewHBox.getChildren().addAll(createMazeBtn, inputFieldsVBox, chooseAlgorithmVBox, saveMaze, shortestWayBtn);
         return menuViewHBox;
     }
 
     private void build_maze(int rows, int cols, Toggle algorithm) {
+        BorderPane a = (BorderPane)borderPane.getTop();
+        HBox menu = (HBox)a.getBottom();
+        Button saveBtn = (Button)menu.getChildren().get(3);
+        saveBtn.setDisable(false);
+
         sviatoslav.mazes.MazeAlgorithm mazeAlgorithm;
         if(algorithm.getUserData().toString().equals("DepthFirst"))
             mazeAlgorithm = MazeAlgorithmFactory.getMazeAlgorithm(MazeAlgorithm.DEPTH_FIRST_SEARCH);
@@ -190,14 +183,22 @@ public class Main extends Application {
             return;
         }
 
-        Maze maze = new Maze(mazeAlgorithm, rows, cols);
-        System.out.print(maze);
+        maze = new Maze(mazeAlgorithm, rows, cols);
         maze.createMaze();
         borderPane.setCenter(maze);
-        BorderPane a = (BorderPane)borderPane.getTop();
-        HBox menu = (HBox)a.getBottom();
-        Button button = (Button)menu.getChildren().get(3);
-        button.setDisable(false);
+    }
+
+    private void findShortestWay() {
+        if(maze.isCreated())
+            maze.findShortestWay();
+        else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("MazeGenerator Message");
+            alert.setHeaderText("Can't complete action");
+            alert.setContentText("Wait for maze generation to finish");
+            alert.showAndWait();
+        }
+
     }
 
     public static void main(String[] args) {
