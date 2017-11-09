@@ -5,19 +5,25 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.control.Alert;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.GridPane;
+import sviatoslav.enums.Side;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class Maze extends GridPane {
     private int rows;
     private int cols;
+    private Point enter;
+    private Point exit;
     private Cell[][] cells;
+    private boolean created = false;
     private int[][] sizes = {{10, 7, 52}, {19, 11, 42},  {22, 13, 33}, {26, 14, 30},
             {31, 18, 25}, {39, 23, 20}, {52, 29, 15}};
     private MazeAlgorithm algorithm;
@@ -49,21 +55,129 @@ public class Maze extends GridPane {
     }
 
     public void createMaze() {
-        algorithm.createMaze(this.cells, this.rows, this.cols);
+        algorithm.createMaze(this);
     }
 
-    public int getRows() {
+    private void checkNeigboursLength(int row, int col) {
+        int[] neighbours = {0, 0, 0 , 0};
+        if(col > 0)
+            if(!cells[row][col].isWall(Side.LEFT_SIDE) && cells[row][col-1].getLength() == 0) {
+                cells[row][col-1].setLength(cells[row][col].getLength() + 1);
+                cells[row][col-1].drawLength();
+                neighbours[0] = 1;
+            }
+        if(row > 0)
+            if(!cells[row][col].isWall(Side.TOP_SIDE) && cells[row-1][col].getLength() == 0) {
+                cells[row-1][col].setLength(cells[row][col].getLength() + 1);
+                cells[row-1][col].drawLength();
+                neighbours[1] = 1;
+            }
+        if(col < cols-1)
+            if(!cells[row][col].isWall(Side.RIGHT_SIDE) && cells[row][col+1].getLength() == 0) {
+                cells[row][col+1].setLength(cells[row][col].getLength() + 1);
+                cells[row][col+1].drawLength();
+                neighbours[2] = 1;
+            }
+        if(row < rows-1)
+            if(!cells[row][col].isWall(Side.BOTTOM_SIDE) && cells[row+1][col].getLength() == 0) {
+                cells[row+1][col].setLength(cells[row][col].getLength() + 1);
+                cells[row+1][col].drawLength();
+                neighbours[3] = 1;
+            }
+
+        if(neighbours[0] == 1)
+            checkNeigboursLength(row, col-1);
+        if(neighbours[1] == 1)
+            checkNeigboursLength(row-1, col);
+        if(neighbours[2] == 1)
+            checkNeigboursLength(row, col+1);
+        if(neighbours[3] == 1)
+            checkNeigboursLength(row+1, col);
+
+    }
+
+    public void findShortestWay() {
+        if(created) {
+            getEnter().setLength(1);
+            getEnter().drawLength();
+            checkNeigboursLength(enter.x, enter.y);
+        }
+        else {
+            //throw new  TODO
+        }
+    }
+
+    public void setCreated(boolean created) {
+        this.created = created;
+    }
+
+    public boolean isCreated() {
+        return created;
+    }
+
+    int getRows() {
         return rows;
     }
 
-    public int getCols() {
+    int getCols() {
         return cols;
+    }
+
+    Cell getCell(int row, int col) {
+        return cells[row][col];
+    }
+
+    void setEnter(int row, int col) {
+        this.enter = new Point(row, col);
+    }
+
+    public Cell getEnter() {
+        return cells[enter.x][enter.y];
+    }
+
+    void setExit(int row, int col) {
+        this.exit = new Point(row, col);
+    }
+
+    public Cell getExit() {
+        return cells[exit.x][exit.y];
+    }
+
+    void destroyWalls() {
+        for (int i = 0; i < rows; i++) {
+            for(int j =0; j < cols; j++) {
+                if (i < rows-1) {
+                    cells[i][j].deleteWall(Side.BOTTOM_SIDE);
+                    cells[i+1][j].deleteWall(Side.TOP_SIDE);
+                    cells[i+1][j].update();
+                }
+                if (j < cols-1) {
+                    cells[i][j].deleteWall(Side.RIGHT_SIDE);
+                    cells[i][j+1].deleteWall(Side.LEFT_SIDE);
+                    cells[i][j+1].update();
+                }
+                cells[i][j].setVisitedColor();
+                cells[i][j].update();
+            }
+        }
+    }
+
+    void buildWalls() {
+        for(int i =0; i < rows; i++) {
+            for(int j = 0; j < cols; j++) {
+                cells[i][j].buildWall(Side.BOTTOM_SIDE);
+                cells[i][j].buildWall(Side.TOP_SIDE);
+                cells[i][j].buildWall(Side.RIGHT_SIDE);
+                cells[i][j].buildWall(Side.LEFT_SIDE);
+                cells[i][j].setUnvisitedColor();
+            }
+        }
     }
 
     @FXML
     public void saveAsPng() {
         WritableImage image = snapshot(new SnapshotParameters(), null);
-        File file = new File("chart.png");
+        File file = new File("maze" + new SimpleDateFormat("ss-mm-hh-dd-MM-yyyy").format(new Date()) + ".png");
         try {
             ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
         } catch (IOException e) {
