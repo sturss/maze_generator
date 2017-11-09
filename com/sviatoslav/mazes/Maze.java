@@ -24,8 +24,6 @@ public class Maze extends GridPane {
     private Point exit;
     private Cell[][] cells;
     private boolean created = false;
-    private int[][] sizes = {{10, 7, 52}, {19, 11, 42},  {22, 13, 33}, {26, 14, 30},
-            {31, 18, 25}, {39, 23, 20}, {52, 29, 15}};
     private MazeAlgorithm algorithm;
 
     public Maze(MazeAlgorithm algorithm, int rows, int cols){
@@ -34,7 +32,10 @@ public class Maze extends GridPane {
         this.algorithm = algorithm;
         cells = new Cell[rows][cols];
         int size = 10;
+        int[][] sizes = {{10, 7, 52}, {19, 11, 42}, {22, 13, 33}, {26, 14, 30},
+                {31, 18, 25}, {39, 23, 20}, {52, 29, 15}};
         for(int i =0; i < 7; i++) {
+
             if(rows <= sizes[i][1] && cols <= sizes[i][0]) {
                 size = sizes[i][2];
                 break;
@@ -58,7 +59,7 @@ public class Maze extends GridPane {
         algorithm.createMaze(this);
     }
 
-    private void checkNeigboursLength(int row, int col) {
+    private void checkNeighboursLength(int row, int col) {
         int[] neighbours = {0, 0, 0 , 0};
         if(col > 0)
             if(!cells[row][col].isWall(Side.LEFT_SIDE) && cells[row][col-1].getLength() == 0) {
@@ -86,13 +87,13 @@ public class Maze extends GridPane {
             }
 
         if(neighbours[0] == 1)
-            checkNeigboursLength(row, col-1);
+            checkNeighboursLength(row, col-1);
         if(neighbours[1] == 1)
-            checkNeigboursLength(row-1, col);
+            checkNeighboursLength(row-1, col);
         if(neighbours[2] == 1)
-            checkNeigboursLength(row, col+1);
+            checkNeighboursLength(row, col+1);
         if(neighbours[3] == 1)
-            checkNeigboursLength(row+1, col);
+            checkNeighboursLength(row+1, col);
 
     }
 
@@ -100,14 +101,14 @@ public class Maze extends GridPane {
         if(created) {
             getEnter().setLength(1);
             getEnter().drawLength();
-            checkNeigboursLength(enter.x, enter.y);
+            checkNeighboursLength(enter.x, enter.y);
         }
         else {
             //throw new  TODO
         }
     }
 
-    public void setCreated(boolean created) {
+    void setCreated(boolean created) {
         this.created = created;
     }
 
