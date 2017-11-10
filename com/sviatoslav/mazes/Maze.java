@@ -8,7 +8,8 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.GridPane;
 import sviatoslav.enums.Side;
-import sviatoslav.exceptions.MazeGenerationNotFinished;
+import sviatoslav.exceptions.MazeGenerationNotFinishedException;
+import sviatoslav.exceptions.MazeSizeOutOfRangeException;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -27,9 +28,9 @@ public class Maze extends GridPane {
     private boolean created = false;
     private MazeAlgorithm algorithm;
 
-    public Maze(MazeAlgorithm algorithm, int rows, int cols){
+    public Maze(MazeAlgorithm algorithm, int rows, int cols) throws MazeSizeOutOfRangeException{
         if (rows < 3 || cols < 3 || rows > 100 || cols > 100)
-            throw new IllegalArgumentException("Wrong values of maze size");
+            throw new MazeSizeOutOfRangeException("Wrong values of size");
         this.algorithm = algorithm;
         cells = new Cell[rows][cols];
         int size = 10;
@@ -98,13 +99,13 @@ public class Maze extends GridPane {
 
     }
 
-    public void findShortestWay() throws MazeGenerationNotFinished {
+    public void findShortestWay() throws MazeGenerationNotFinishedException {
         if (created) {
             getEnter().setLength(1);
             getEnter().drawLength();
             checkNeighboursLength(enter.x, enter.y);
         } else {
-            throw new MazeGenerationNotFinished("Maze is not created yet");
+            throw new MazeGenerationNotFinishedException("Maze is not created yet");
         }
     }
 

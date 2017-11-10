@@ -8,7 +8,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.StageStyle;
 import sviatoslav.enums.MazeAlgorithm;
-import sviatoslav.exceptions.MazeGenerationNotFinished;
+import sviatoslav.exceptions.MazeGenerationNotFinishedException;
+import sviatoslav.exceptions.MazeSizeOutOfRangeException;
 import sviatoslav.mazes.Maze;
 import sviatoslav.mazes.MazeAlgorithmFactory;
 import sviatoslav.ui.NumberInput;
@@ -18,7 +19,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-
 
 public class Main extends Application {
     private BorderPane mainBorderPane = new BorderPane();
@@ -31,15 +31,27 @@ public class Main extends Application {
         this.stage = stage;
         stage.initStyle(StageStyle.TRANSPARENT) ;
 
-        mainBorderPane.getStyleClass().add("borderPaneStyle");
         BorderPane topBorderPane = new BorderPane();
-        ToolBar toolBar = new ToolBar();
+        topBorderPane.setTop(createToolBar());
+        topBorderPane.setBottom(createMenu());
 
+        mainBorderPane.getStyleClass().add("borderPaneStyle");
+        mainBorderPane.setTop(topBorderPane);
+        Scene scene = new Scene(mainBorderPane, 800, 555);
+        scene.setFill(Color.TRANSPARENT);
+        scene.getStylesheets().add(getClass().getResource("css\\style.css").toExternalForm());
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    private ToolBar createToolBar() {
+        ToolBar toolBar = new ToolBar();
         toolBar.getStyleClass().add("toolBarStyle");
         toolBar.setPrefHeight(25);
         toolBar.setMinHeight(25);
         toolBar.setMaxHeight(25);
-        toolBar.getItems().add(new WindowButtons());
+        toolBar.getItems().add(createWindowButtons());
         toolBar.setPadding(new Insets(0, 0, 0, 0));
 
         toolBar.setOnMousePressed(event -> {
@@ -56,34 +68,19 @@ public class Main extends Application {
             stage.setX(event.getScreenX() + xOffset);
             stage.setY(event.getScreenY() + yOffset);
         });
-
-
-        topBorderPane.setTop(toolBar);
-        topBorderPane.setBottom(createMenu());
-
-        mainBorderPane.setTop(topBorderPane);
-        Scene scene = new Scene(mainBorderPane, 800, 555);
-        scene.setFill(Color.TRANSPARENT);
-        scene.getStylesheets().add(getClass().getResource("css\\style.css").toExternalForm());
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.show();
+        return  toolBar;
     }
 
-    class WindowButtons extends HBox {
-
-        WindowButtons() {
-            Button closeBtn = new Button("X");
-            Button minimizeBtn = new Button("_");
-
-            closeBtn.getStyleClass().add("btnCloseStyle");
-            minimizeBtn.getStyleClass().add("btnMinimizeStyle");
-
-            closeBtn.setOnAction(actionEvent -> Platform.exit());
-            minimizeBtn.setOnAction(actionEvent -> stage.setIconified(true));
-
-            this.getChildren().addAll(closeBtn, minimizeBtn);
-        }
+    private HBox createWindowButtons(){
+        HBox bar = new HBox();
+        Button closeBtn = new Button("X");
+        Button minimizeBtn = new Button("_");
+        closeBtn.getStyleClass().add("btnCloseStyle");
+        minimizeBtn.getStyleClass().add("btnMinimizeStyle");
+        closeBtn.setOnAction(actionEvent -> Platform.exit());
+        minimizeBtn.setOnAction(actionEvent -> stage.setIconified(true));
+        bar.getChildren().addAll(closeBtn, minimizeBtn);
+        return bar;
     }
 
     private HBox createMenu() {
@@ -146,24 +143,10 @@ public class Main extends Application {
 
         Button createMazeBtn = new Button("Create Maze");
         createMazeBtn.getStyleClass().add("btnStyle");
-        createMazeBtn.setOnAction(event -> {
-            try {
-                if(Integer.parseInt(rowNumberInput.getText()) > 44 || Integer.parseInt(colNumberInput.getText()) > 77
-                        || Integer.parseInt(rowNumberInput.getText()) < 4 || Integer.parseInt(colNumberInput.getText()) < 4)
-                    throw new IllegalArgumentException("Wrong size inputs");
-                this.build_maze(
+        createMazeBtn.setOnAction(event -> this.build_maze(
                         Integer.parseInt(rowNumberInput.getText()),
                         Integer.parseInt(colNumberInput.getText()),
-                        algorithmsButtonsGroup.getSelectedToggle());
-            }
-            catch(final IllegalArgumentException exception){
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Input Error");
-                alert.setHeaderText("Look, an Error Dialog");
-                alert.setContentText("Size of the maze must be: \n - row in [4, 44]\n - col in [4, 77]");
-                alert.showAndWait();
-            }
-        });
+                        algorithmsButtonsGroup.getSelectedToggle()));
 
         menuViewHBox.getChildren().addAll(createMazeBtn, inputFieldsVBox, chooseAlgorithmVBox, saveMazeBtn, shortestWayBtn);
         return menuViewHBox;
@@ -183,16 +166,25 @@ public class Main extends Application {
         else {
             return;
         }
-        maze = new Maze(mazeAlgorithm, rows, cols);
-        maze.createMaze();
-        mainBorderPane.setCenter(maze);
+        try {
+            maze = new Maze(mazeAlgorithm, rows, cols);
+            maze.createMaze();
+            mainBorderPane.setCenter(maze);
+        } catch (MazeSizeOutOfRangeException ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Input Error");
+            alert.setHeaderText("Look, an Error Dialog");
+            alert.setContentText("Size of the maze must be: \n - row in [4, 44]\n - col in [4, 77]");
+            alert.showAndWait();
+        }
+
     }
 
     private void findShortestWay() {
         try {
             maze.findShortestWay();
         }
-        catch (MazeGenerationNotFinished ex) {
+        catch (MazeGenerationNotFinishedException ex) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("MazeGenerator Message");
             alert.setHeaderText("Can't complete action");
