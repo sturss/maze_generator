@@ -8,6 +8,7 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.GridPane;
 import sviatoslav.enums.Side;
+import sviatoslav.exceptions.MazeGenerationNotFinished;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -97,14 +98,13 @@ public class Maze extends GridPane {
 
     }
 
-    public void findShortestWay() {
-        if(created) {
+    public void findShortestWay() throws MazeGenerationNotFinished {
+        if (created) {
             getEnter().setLength(1);
             getEnter().drawLength();
             checkNeighboursLength(enter.x, enter.y);
-        }
-        else {
-            //throw new  TODO
+        } else {
+            throw new MazeGenerationNotFinished("Maze is not created yet");
         }
     }
 

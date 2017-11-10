@@ -8,6 +8,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.StageStyle;
 import sviatoslav.enums.MazeAlgorithm;
+import sviatoslav.exceptions.MazeGenerationNotFinished;
 import sviatoslav.mazes.Maze;
 import sviatoslav.mazes.MazeAlgorithmFactory;
 import sviatoslav.ui.NumberInput;
@@ -20,7 +21,7 @@ import javafx.stage.Stage;
 
 
 public class Main extends Application {
-    private BorderPane borderPane = new BorderPane();
+    private BorderPane mainBorderPane = new BorderPane();
     private Stage stage;
     private Maze maze;
     private double xOffset;
@@ -30,8 +31,8 @@ public class Main extends Application {
         this.stage = stage;
         stage.initStyle(StageStyle.TRANSPARENT) ;
 
-        borderPane.getStyleClass().add("borderPaneStyle");
-        BorderPane topBP = new BorderPane();
+        mainBorderPane.getStyleClass().add("borderPaneStyle");
+        BorderPane topBorderPane = new BorderPane();
         ToolBar toolBar = new ToolBar();
 
         toolBar.getStyleClass().add("toolBarStyle");
@@ -57,11 +58,11 @@ public class Main extends Application {
         });
 
 
-        topBP.setTop(toolBar);
-        topBP.setBottom(create_menu());
+        topBorderPane.setTop(toolBar);
+        topBorderPane.setBottom(createMenu());
 
-        borderPane.setTop(topBP);
-        Scene scene = new Scene(borderPane, 800, 555);
+        mainBorderPane.setTop(topBorderPane);
+        Scene scene = new Scene(mainBorderPane, 800, 555);
         scene.setFill(Color.TRANSPARENT);
         scene.getStylesheets().add(getClass().getResource("css\\style.css").toExternalForm());
         stage.setScene(scene);
@@ -85,7 +86,7 @@ public class Main extends Application {
         }
     }
 
-    private HBox create_menu() {
+    private HBox createMenu() {
         HBox menuViewHBox = new HBox();
         menuViewHBox.getStyleClass().add("menuHBoxStyle");
         menuViewHBox.setPadding(new Insets(15, 12, 15, 12));
@@ -131,11 +132,11 @@ public class Main extends Application {
         VBox.setMargin(algorithmDepthFirstCheck, new Insets(2, 0, 5, 0));
         chooseAlgorithmVBox.getChildren().addAll(algorithmDepthFirstCheck, algorithmRecursiveDivisionCheck);
 
-        Button saveMaze = new Button("Save Maze Image");
-        saveMaze.getStyleClass().add("btnStyle");
-        saveMaze.setDisable(true);
-        saveMaze.setOnAction(event -> {
-            Maze s = (Maze) borderPane.getCenter();
+        Button saveMazeBtn = new Button("Save Maze Image");
+        saveMazeBtn.getStyleClass().add("btnStyle");
+        saveMazeBtn.setDisable(true);
+        saveMazeBtn.setOnAction(event -> {
+            Maze s = (Maze) mainBorderPane.getCenter();
             s.saveAsPng();
         });
 
@@ -164,12 +165,12 @@ public class Main extends Application {
             }
         });
 
-        menuViewHBox.getChildren().addAll(createMazeBtn, inputFieldsVBox, chooseAlgorithmVBox, saveMaze, shortestWayBtn);
+        menuViewHBox.getChildren().addAll(createMazeBtn, inputFieldsVBox, chooseAlgorithmVBox, saveMazeBtn, shortestWayBtn);
         return menuViewHBox;
     }
 
     private void build_maze(int rows, int cols, Toggle algorithm) {
-        BorderPane a = (BorderPane)borderPane.getTop();
+        BorderPane a = (BorderPane) mainBorderPane.getTop();
         HBox menu = (HBox)a.getBottom();
         Button saveBtn = (Button)menu.getChildren().get(3);
         saveBtn.setDisable(false);
@@ -182,16 +183,16 @@ public class Main extends Application {
         else {
             return;
         }
-
         maze = new Maze(mazeAlgorithm, rows, cols);
         maze.createMaze();
-        borderPane.setCenter(maze);
+        mainBorderPane.setCenter(maze);
     }
 
     private void findShortestWay() {
-        if(maze.isCreated())
+        try {
             maze.findShortestWay();
-        else {
+        }
+        catch (MazeGenerationNotFinished ex) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("MazeGenerator Message");
             alert.setHeaderText("Can't complete action");
