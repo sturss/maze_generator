@@ -29,7 +29,7 @@ public class Maze extends GridPane {
     private MazeAlgorithm algorithm;
 
     public Maze(MazeAlgorithm algorithm, int rows, int cols) throws MazeSizeOutOfRangeException{
-        if (rows < 3 || cols < 3 || rows > 100 || cols > 100)
+        if (rows < 3 || cols < 3 || rows > 44 || cols > 77)
             throw new MazeSizeOutOfRangeException("Wrong values of size");
         this.algorithm = algorithm;
         cells = new Cell[rows][cols];
@@ -57,9 +57,7 @@ public class Maze extends GridPane {
         }
     }
 
-    public void createMaze() {
-        algorithm.createMaze(this);
-    }
+    public void createMaze() { algorithm.createMaze(this); }
 
     private void checkNeighboursLength(int row, int col) {
         int[] neighbours = {0, 0, 0 , 0};
