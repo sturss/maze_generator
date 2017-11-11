@@ -4,6 +4,9 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import sviatoslav.enums.Side;
 
 class Cell extends Region {
@@ -42,13 +45,14 @@ class Cell extends Region {
     }
 
     void setVisitedColor() {
-        colorStyle = "-fx-background-color: #52c7b8; ";
+        colorStyle = "-fx-background-color: #a0e6ec; ";
     }
 
     void setUnvisitedColor() {
         colorStyle = "-fx-background-color: #00766c; ";
     }
 
+    void setShortestWayColor() { colorStyle = "-fx-background-color: #52c7b8; "; }
 
     int getLength() {
         return length;

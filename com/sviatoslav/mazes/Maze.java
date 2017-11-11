@@ -35,7 +35,7 @@ public class Maze extends GridPane {
         cells = new Cell[rows][cols];
         int size = 10;
         int[][] sizes = {{10, 7, 52}, {19, 11, 42}, {22, 13, 33}, {26, 14, 30},
-                {31, 18, 25}, {39, 23, 20}, {52, 29, 15}};
+                {31, 18, 25}, {39, 23, 20}, {52, 35, 15}};
         for(int i =0; i < 7; i++) {
 
             if(rows <= sizes[i][1] && cols <= sizes[i][0]) {
@@ -59,7 +59,7 @@ public class Maze extends GridPane {
 
     public void createMaze() { algorithm.createMaze(this); }
 
-    private void checkNeighboursLength(int row, int col) {
+    private void shortestWayCheckNeighboursLength(int row, int col) {
         int[] neighbours = {0, 0, 0 , 0};
         if(col > 0)
             if(!cells[row][col].isWall(Side.LEFT_SIDE) && cells[row][col-1].getLength() == 0) {
@@ -87,21 +87,62 @@ public class Maze extends GridPane {
             }
 
         if(neighbours[0] == 1)
-            checkNeighboursLength(row, col-1);
+            shortestWayCheckNeighboursLength(row, col-1);
         if(neighbours[1] == 1)
-            checkNeighboursLength(row-1, col);
+            shortestWayCheckNeighboursLength(row-1, col);
         if(neighbours[2] == 1)
-            checkNeighboursLength(row, col+1);
+            shortestWayCheckNeighboursLength(row, col+1);
         if(neighbours[3] == 1)
-            checkNeighboursLength(row+1, col);
+            shortestWayCheckNeighboursLength(row+1, col);
 
+    }
+
+    private void shortestWayBackTracking(){
+        int row = exit.x;
+        int col = exit.y;
+        int lengthIndex = cells[row][col].getLength();
+
+        while(lengthIndex != 0) {
+            lengthIndex--;
+            System.out.print(lengthIndex + "\n");
+            cells[row][col].setShortestWayColor();
+            cells[row][col].update();
+            if (col > 0)
+                if (!cells[row][col].isWall(Side.LEFT_SIDE)) {
+                    if(cells[row][col-1].getLength() == lengthIndex) {
+                        col--;
+                        continue;
+                    }
+                }
+            if (row > 0)
+                if (!cells[row][col].isWall(Side.TOP_SIDE)) {
+                    if(cells[row-1][col].getLength() == lengthIndex) {
+                        row--;
+                        continue;
+                    }
+                }
+            if (col < cols - 1)
+                if (!cells[row][col].isWall(Side.RIGHT_SIDE)) {
+                    if(cells[row][col+1].getLength() == lengthIndex) {
+                        col++;
+                        continue;
+                    }
+                }
+            if (row < rows - 1)
+                if (!cells[row][col].isWall(Side.BOTTOM_SIDE)) {
+                    if (cells[row+1][col].getLength() == lengthIndex){
+                        row++;
+                    }
+                }
+        }
     }
 
     public void findShortestWay() throws MazeGenerationNotFinishedException {
         if (created) {
             getEnter().setLength(1);
             getEnter().drawLength();
-            checkNeighboursLength(enter.x, enter.y);
+            shortestWayCheckNeighboursLength(enter.x, enter.y);
+            shortestWayBackTracking();
         } else {
             throw new MazeGenerationNotFinishedException("Maze is not created yet");
         }
