@@ -15,7 +15,7 @@ class RecursiveDivisionMazeAlgorithm implements MazeAlgorithm {
     public void createMaze(Maze maze) {
         time = 10;
         maze.destroyWalls();
-        createM(maze, 0, 0, maze.getCols()-1,
+        recursiveDivision(maze, 0, 0, maze.getCols()-1,
                 maze.getRows()-1, 0);
 
         Random random = new Random();
@@ -30,8 +30,8 @@ class RecursiveDivisionMazeAlgorithm implements MazeAlgorithm {
         isDone = true;
     }
 
-    private void createM(Maze maze, int leftColBound, int topRowBound,
-                         int rightColBound, int bottomRowBound, int turn) {
+    private void recursiveDivision(Maze maze, int leftColBound, int topRowBound,
+                                   int rightColBound, int bottomRowBound, int turn) {
         if(rightColBound - leftColBound >= 1 && bottomRowBound - topRowBound >= 1) {
             this.time += 100;
             Random rand = new Random();
@@ -60,8 +60,8 @@ class RecursiveDivisionMazeAlgorithm implements MazeAlgorithm {
                 });
                 functionCounter += 1;
                 buildingPause.play();
-                createM(maze, leftColBound, topRowBound, rightColBound, row, 1);
-                createM(maze, leftColBound, row+1, rightColBound, bottomRowBound, 1);
+                recursiveDivision(maze, leftColBound, topRowBound, rightColBound, row, 1);
+                recursiveDivision(maze, leftColBound, row+1, rightColBound, bottomRowBound, 1);
             }
             else {
                 buildingPause.setOnFinished(event -> {
@@ -85,8 +85,8 @@ class RecursiveDivisionMazeAlgorithm implements MazeAlgorithm {
                 });
                 functionCounter += 1;
                 buildingPause.play();
-                createM(maze, leftColBound, topRowBound, col, bottomRowBound, 0);
-                createM(maze, col+1, topRowBound, rightColBound, bottomRowBound, 0);
+                recursiveDivision(maze, leftColBound, topRowBound, col, bottomRowBound, 0);
+                recursiveDivision(maze, col+1, topRowBound, rightColBound, bottomRowBound, 0);
             }
         }
     }

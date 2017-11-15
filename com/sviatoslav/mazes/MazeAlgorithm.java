@@ -1,6 +1,6 @@
 package sviatoslav.mazes;
 
-public interface MazeAlgorithm {
+interface MazeAlgorithm {
     void createMaze(Maze maze);
 }
 
