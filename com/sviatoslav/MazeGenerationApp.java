@@ -9,6 +9,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.StageStyle;
 import sviatoslav.enums.MazeAlgorithm;
 import sviatoslav.exceptions.MazeGenerationNotFinishedException;
+import sviatoslav.exceptions.MazeSavingException;
 import sviatoslav.exceptions.MazeSizeOutOfRangeException;
 import sviatoslav.mazes.Maze;
 import sviatoslav.mazes.MazeAlgorithmFactory;
@@ -20,7 +21,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class MazeGenerationApp extends Application {
     private BorderPane mainBorderPane = new BorderPane();
     private Stage stage;
     private Maze maze;
@@ -134,7 +135,16 @@ public class Main extends Application {
         saveMazeBtn.setDisable(true);
         saveMazeBtn.setOnAction(event -> {
             Maze s = (Maze) mainBorderPane.getCenter();
-            s.saveAsPng();
+            try {
+                s.saveAsPng();
+            }
+            catch(MazeSavingException ex){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("MazeGenerator Message");
+                alert.setHeaderText("Saving Error");
+                alert.setContentText("Unexpected error: " + ex.toString());
+                alert.showAndWait();
+            }
         });
 
         Button shortestWayBtn = new Button("The Shortest Way");
@@ -158,22 +168,17 @@ public class Main extends Application {
         Button saveBtn = (Button)menu.getChildren().get(3);
         saveBtn.setDisable(false);
 
-        sviatoslav.mazes.MazeAlgorithm mazeAlgorithm;
-        if(algorithm.getUserData().toString().equals("DepthFirst"))
-            mazeAlgorithm = MazeAlgorithmFactory.getMazeAlgorithm(MazeAlgorithm.DEPTH_FIRST_SEARCH);
-        else if(algorithm.getUserData().toString().equals("RecursiveDivision"))
-            mazeAlgorithm = MazeAlgorithmFactory.getMazeAlgorithm(MazeAlgorithm.RECURSIVE_DIVIDE_SEARCH);
-        else {
-            return;
-        }
         try {
-            maze = new Maze(mazeAlgorithm, rows, cols);
+            if(algorithm.getUserData().toString().equals("DepthFirst"))
+                maze = new Maze(MazeAlgorithmFactory.getMazeAlgorithm(MazeAlgorithm.DEPTH_FIRST_SEARCH), rows, cols);
+            else if(algorithm.getUserData().toString().equals("RecursiveDivision"))
+                maze = new Maze(MazeAlgorithmFactory.getMazeAlgorithm(MazeAlgorithm.RECURSIVE_DIVIDE_SEARCH), rows, cols);
             maze.createMaze();
             mainBorderPane.setCenter(maze);
         } catch (MazeSizeOutOfRangeException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Input Error");
-            alert.setHeaderText("Look, an Error Dialog");
+            alert.setTitle("MazeGenerator Message");
+            alert.setHeaderText("Input Error");
             alert.setContentText("Size of the maze must be: \n - row in [4, 44]\n - col in [4, 77]");
             alert.showAndWait();
         }

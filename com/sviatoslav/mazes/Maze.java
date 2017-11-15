@@ -9,6 +9,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.GridPane;
 import sviatoslav.enums.Side;
 import sviatoslav.exceptions.MazeGenerationNotFinishedException;
+import sviatoslav.exceptions.MazeSavingException;
 import sviatoslav.exceptions.MazeSizeOutOfRangeException;
 
 import javax.imageio.ImageIO;
@@ -37,7 +38,6 @@ public class Maze extends GridPane {
         int[][] sizes = {{10, 7, 52}, {19, 11, 42}, {22, 13, 33}, {26, 14, 30},
                 {31, 18, 25}, {39, 23, 20}, {52, 35, 15}};
         for(int i =0; i < 7; i++) {
-
             if(rows <= sizes[i][1] && cols <= sizes[i][0]) {
                 size = sizes[i][2];
                 break;
@@ -104,7 +104,6 @@ public class Maze extends GridPane {
 
         while(lengthIndex != 0) {
             lengthIndex--;
-            System.out.print(lengthIndex + "\n");
             cells[row][col].setShortestWayColor();
             cells[row][col].update();
             if (col > 0)
@@ -148,20 +147,20 @@ public class Maze extends GridPane {
         }
     }
 
-    void setCreated(boolean created) {
-        this.created = created;
-    }
-
     public boolean isCreated() {
         return created;
     }
 
-    int getRows() {
+    public int getRows() {
         return rows;
     }
 
-    int getCols() {
+    public int getCols() {
         return cols;
+    }
+
+    void setCreated(boolean created) {
+        this.created = created;
     }
 
     Cell getCell(int row, int col) {
@@ -172,7 +171,7 @@ public class Maze extends GridPane {
         this.enter = new Point(row, col);
     }
 
-    public Cell getEnter() {
+    Cell getEnter() {
         return cells[enter.x][enter.y];
     }
 
@@ -180,7 +179,7 @@ public class Maze extends GridPane {
         this.exit = new Point(row, col);
     }
 
-    public Cell getExit() {
+    Cell getExit() {
         return cells[exit.x][exit.y];
     }
 
@@ -216,13 +215,13 @@ public class Maze extends GridPane {
     }
 
     @FXML
-    public void saveAsPng() {
+    public void saveAsPng() throws MazeSavingException {
         WritableImage image = snapshot(new SnapshotParameters(), null);
         File file = new File("maze" + new SimpleDateFormat("ss-mm-hh-dd-MM-yyyy").format(new Date()) + ".png");
         try {
             ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
         } catch (IOException e) {
-            System.out.print(e);
+            throw new MazeSavingException();
         }
     }
 }
