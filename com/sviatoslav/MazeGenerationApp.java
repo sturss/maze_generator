@@ -10,7 +10,7 @@ import javafx.stage.StageStyle;
 import sviatoslav.enums.MazeAlgorithm;
 import sviatoslav.exceptions.MazeGenerationNotFinishedException;
 import sviatoslav.exceptions.MazeSavingException;
-import sviatoslav.exceptions.MazeSizeOutOfRangeException;
+import sviatoslav.exceptions.MazeSizeException;
 import sviatoslav.mazes.Maze;
 import sviatoslav.mazes.MazeAlgorithmFactory;
 import sviatoslav.ui.NumberInput;
@@ -175,7 +175,7 @@ public class MazeGenerationApp extends Application {
                 maze = new Maze(MazeAlgorithmFactory.getMazeAlgorithm(MazeAlgorithm.RECURSIVE_DIVIDE_SEARCH), rows, cols);
             maze.createMaze();
             mainBorderPane.setCenter(maze);
-        } catch (MazeSizeOutOfRangeException ex) {
+        } catch (MazeSizeException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("MazeGenerator Message");
             alert.setHeaderText("Input Error");

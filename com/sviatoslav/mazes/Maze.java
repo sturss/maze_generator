@@ -10,7 +10,7 @@ import javafx.scene.layout.GridPane;
 import sviatoslav.enums.Side;
 import sviatoslav.exceptions.MazeGenerationNotFinishedException;
 import sviatoslav.exceptions.MazeSavingException;
-import sviatoslav.exceptions.MazeSizeOutOfRangeException;
+import sviatoslav.exceptions.MazeSizeException;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -29,9 +29,9 @@ public class Maze extends GridPane {
     private boolean created = false;
     private MazeAlgorithm algorithm;
 
-    public Maze(MazeAlgorithm algorithm, int rows, int cols) throws MazeSizeOutOfRangeException{
+    public Maze(MazeAlgorithm algorithm, int rows, int cols) throws MazeSizeException {
         if (rows < 3 || cols < 3 || rows > 44 || cols > 77)
-            throw new MazeSizeOutOfRangeException("Wrong values of size");
+            throw new MazeSizeException("Wrong values of size");
         this.algorithm = algorithm;
         cells = new Cell[rows][cols];
         int size = 10;
